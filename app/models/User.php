@@ -17,6 +17,14 @@ class User {
     $rows = $statement->fetch(PDO::FETCH_ASSOC);
     return $rows;
   }
+  // function to get user by username
+    public function get_username($username) {
+      $db = db_connect();
+      $statement = $db->prepare("SELECT * FROM users WHERE username = :username");
+      $statement->bindParam(':username', $username, PDO::PARAM_STR);
+      $statement->execute();
+      return $statement->fetch(PDO::FETCH_ASSOC);
+    }
 
     //Function to add attempt Logs to log table
     public function log_attempt($username, $attempt) {
