@@ -26,7 +26,7 @@ class Create extends Controller {
                  !preg_match('/[a-z]/', $password) || 
                  !preg_match('/[0-9]/', $password) || 
                  !preg_match('/[\W_]/', $password)) {
-                 $validation_errors[] = "Password do not meet the security requirements.";
+                 $validation_errors[] = "Password does not meet the security requirements.";
              }
 
              // Create a new User instance
