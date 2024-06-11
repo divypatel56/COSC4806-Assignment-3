@@ -10,14 +10,18 @@ class User {
         
     }
 
-    public function test () {
-      $db = db_connect();
-      $statement = $db->prepare("select * from users;");
-      $statement->execute();
-      $rows = $statement->fetch(PDO::FETCH_ASSOC);
-      return $rows;
+    //Function to add attempt Logs to log table
+    public function log_attempt($username, $attempt) {
+        $db = db_connect();
+        $statement = $db->prepare("INSERT INTO log (username, attempt, time) VALUES (:username, :attempt, NOW())");
+        $statement->bindParam(':username', $username, PDO::PARAM_STR);
+        $statement->bindParam(':attempt', $attempt, PDO::PARAM_STR);
+        $statement->execute();
     }
 
+    
+
+    // Function to validate user credentials  
     public function authenticate($username, $password) {
        
       $db = db_connect();
