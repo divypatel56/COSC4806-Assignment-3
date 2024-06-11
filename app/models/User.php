@@ -19,6 +19,16 @@ class User {
         $statement->execute();
     }
 
+    //Function to get total failed attempts for a user.
+    public function get_failed_attempts($username) {
+      $db = db_connect();
+      $statement = $db->prepare("SELECT COUNT(*) as attempts FROM log WHERE username = :username AND     attempt = 'bad' AND time > (NOW() - INTERVAL 1 MINUTE)");
+      $statement->bindParam(':username', $username, PDO::PARAM_STR);
+      $statement->execute();
+      return $statement->fetch(PDO::FETCH_ASSOC)['attempts'];
+    }
+  
+
     
 
     // Function to validate user credentials  
