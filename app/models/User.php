@@ -26,6 +26,15 @@ class User {
       return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
+    //Function to create a new user
+    public function create_user($username, $password){
+        $db = db_connect();
+        $statement = $db->prepare("INSERT INTO users (username, password) VALUES (:username, :password)");
+        $statement->bindParam(':username', $username,PDO::PARAM_STR);
+        $statement->bindParam(':password', $password,PDO::PARAM_STR);
+        $statement->execute();
+    }
+
     //Function to add attempt Logs to log table
     public function log_attempt($username, $attempt) {
         $db = db_connect();
