@@ -74,6 +74,7 @@ class User {
       $failed_attempts = $this->get_failed_attempts($username);
       $last_failed_attempt = $this->get_last_failed_attempt($username);
 
+      //If failedd attempts is greater than 3, then block the user  
       if ($failed_attempts >= 3) {
           if (time() - strtotime($last_failed_attempt) < 60) {
             $_SESSION['error_message'] = "Too many failed login attempts.Please try again after 60 seconds.";
@@ -82,7 +83,7 @@ class User {
               exit;
           }
       }
-		
+	//if user is verified then set session variables and redirect to home page
       if ($user && password_verify($password, $user['password'])) {
           $_SESSION['auth'] = 1;
           $_SESSION['username'] = $username;
@@ -90,8 +91,7 @@ class User {
           unset($_SESSION['failedAuth']);
           header('Location: /home');
           exit;
-      }  
-      else {
+      }else { //else increment failed attempts and log attempt(Bad)
           if (isset($_SESSION['failedAuth'])) {
               $_SESSION['failedAuth']++; // Increment
           } else {

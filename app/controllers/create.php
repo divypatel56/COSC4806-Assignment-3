@@ -15,11 +15,6 @@ class Create extends Controller {
 
              $validation_errors = [];
 
-             // Check if username is empty
-             if (empty($username)) {
-                 $validation_errors[] = "Username cannot be empty.";
-             }
-
              // Check if passwords match
              if ($password !== $confirm_password) {
                  $validation_errors[] = "Passwords do not match.";
@@ -50,18 +45,11 @@ class Create extends Controller {
                  // Create the user in the database
                  $user->create_user($username, $hashed_password);
 
-                 // Start a new session and set session variables
-                 // session_start();
-                 // $_SESSION['username'] = $username;
-                 // $_SESSION['authenticated'] = 1;
-                 // unset($_SESSION['failed_attempts']);
-
                  // Redirect to the login page
                  header("Location: /login");
                  exit();
 
              }else{
-
                 $_SESSION['validation_errors'] = $validation_errors;
                 $this->view('create/index');
                 exit();
