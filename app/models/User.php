@@ -45,23 +45,38 @@ class User {
       $statement->bindParam(':username', strtolower($username), PDO::PARAM_STR);
       $statement->execute();
       $user = $statement->fetch(PDO::FETCH_ASSOC);
+
+      $failed_attempts = $this->get_failed_attempts($username);
+      $last_failed_attempt = $this->get_last_failed_attempt($username);
+
+      if ($failed_attempts >= 3) {
+          if (time() - strtotime($last_failed_attempt) < 60) {
+            $_SESSION['error_message'] = "Too many failed login attempts.Please try again after 60 seconds.";
+              $this->log_attempt($username, 'bad');
+              header('Location: /login');
+              exit;
+          }
+      }
 		
       if ($user && password_verify($password, $user['password'])) {
           $_SESSION['auth'] = 1;
           $_SESSION['username'] = $username;
+          $this->log_attempt($username, 'good');
           unset($_SESSION['failedAuth']);
           header('Location: /home');
           exit;
       }  
-    else {
-			if(isset($_SESSION['failedAuth'])) {
-				$_SESSION['failedAuth'] ++; //increment
-			} else {
-				$_SESSION['failedAuth'] = 1;
-			}
-			header('Location: /login');
-			die;
-		}
+      else {
+          if (isset($_SESSION['failedAuth'])) {
+              $_SESSION['failedAuth']++; // Increment
+          } else {
+              $_SESSION['failedAuth'] = 1;
+          }
+          $_SESSION['error_message'] = "Invalid username or password.";
+          $this->log_attempt($username, 'bad');
+          header('Location: /login');
+          exit;
+      }
     }
 
 }
