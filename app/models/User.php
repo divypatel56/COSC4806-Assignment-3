@@ -10,6 +10,14 @@ class User {
         
     }
 
+  public function test () {
+    $db = db_connect();
+    $statement = $db->prepare("select * from users;");
+    $statement->execute();
+    $rows = $statement->fetch(PDO::FETCH_ASSOC);
+    return $rows;
+  }
+
     //Function to add attempt Logs to log table
     public function log_attempt($username, $attempt) {
         $db = db_connect();
