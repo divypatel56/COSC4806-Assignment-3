@@ -27,9 +27,15 @@ class User {
       $statement->execute();
       return $statement->fetch(PDO::FETCH_ASSOC)['attempts'];
     }
-  
 
-    
+    //Function to get last failed attempt for a user.
+    public function get_last_failed_attempt($username) {
+        $db = db_connect();
+        $statement = $db->prepare("SELECT time FROM log WHERE username = :username AND attempt = 'bad' ORDER BY time DESC LIMIT 1");
+        $statement->bindParam(':username', $username, PDO::PARAM_STR);
+        $statement->execute();
+        return $statement->fetch(PDO::FETCH_ASSOC)['time'];
+    }
 
     // Function to validate user credentials  
     public function authenticate($username, $password) {
