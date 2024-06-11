@@ -3,8 +3,8 @@
     <div class="page-header" id="banner">
         <div class="row">
             <div class="col-lg-12">
-                <h1>Hey</h1>
-                <p class="lead"> <?= date("F jS, Y"); ?></p>
+                <p class = "lead">Welcome, <?= $_SESSION [ "username" ].".<br> Today is: ". 
+                    date("Y-m-d")."."?> </p>
             </div>
         </div>
     </div>
