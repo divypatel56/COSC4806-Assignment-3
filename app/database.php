@@ -1,14 +1,15 @@
 <?php
-
-/* database connection stuff here
- * 
- */
-
+//Function to connect with database
 function db_connect() {
-    try { 
-        $dbh = new PDO('mysql:host=' . DB_HOST . ';port='. DB_PORT . ';dbname=' . DB_DATABASE, DB_USER, DB_PASS);
+    try {
+        // PDO instance with database connection details
+        $dbh = new PDO('mysql:host=' . DB_HOST . ';port=' . DB_PORT . ';dbname=' . DB_DATABASE, DB_USER, DB_PASS);
+        //Return database handles if successfull
         return $dbh;
     } catch (PDOException $e) {
-        //We should set a global variable here so we know the DB is down
+        //catch exception and return the error messsge
+        echo 'Connection failed: ' . $e->getMessage();
+        exit();
     }
 }
+?>
